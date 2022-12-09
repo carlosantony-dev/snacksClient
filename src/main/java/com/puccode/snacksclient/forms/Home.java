@@ -1,12 +1,34 @@
 package com.puccode.snacksclient.forms;
 
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import stubs.APIResponse;
+import stubs.Order;
+import stubs.OrderID;
+import stubs.clientGrpc;
 
 public class Home extends javax.swing.JFrame {
-
-
+    
+    static ManagedChannel channel;
+    clientGrpc.clientBlockingStub userStub;
+    private int qtdCarrinho = 0;
+    private final Carrinho carrinho;
+    private int posicao = 1;
+    
     public Home() {
+        channel = ManagedChannelBuilder.forAddress("localhost",9090)
+                    .usePlaintext()
+                    .build();
+        
+        userStub = clientGrpc.newBlockingStub(channel);
+        carrinho = new Carrinho();
         initComponents();
     }
 
@@ -42,6 +64,12 @@ public class Home extends javax.swing.JFrame {
         btn_past = new javax.swing.JButton();
         pane_head = new javax.swing.JPanel();
         title = new javax.swing.JLabel();
+        panel_Cart = new javax.swing.JPanel();
+        cart_title = new javax.swing.JLabel();
+        cart_image = new javax.swing.JLabel();
+        cart_circle = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        btn_cancel = new javax.swing.JButton();
 
         jButton3.setText("Comprar");
 
@@ -114,9 +142,9 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(pane_cardoneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(qtd_order_one)
                     .addComponent(input_qtd_one, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addGap(41, 41, 41)
                 .addComponent(btn_hamb)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         pane_cardtwo.setBackground(new java.awt.Color(153, 189, 169));
@@ -153,43 +181,44 @@ public class Home extends javax.swing.JFrame {
         pane_cardtwo.setLayout(pane_cardtwoLayout);
         pane_cardtwoLayout.setHorizontalGroup(
             pane_cardtwoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(descrip_order_two)
+            .addComponent(descrip_order_two, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
             .addGroup(pane_cardtwoLayout.createSequentialGroup()
                 .addGroup(pane_cardtwoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pane_cardtwoLayout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addGroup(pane_cardtwoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pane_cardtwoLayout.createSequentialGroup()
-                                .addComponent(img_order_two)
-                                .addGap(44, 44, 44))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pane_cardtwoLayout.createSequentialGroup()
-                                .addComponent(name_order_two)
-                                .addGap(111, 111, 111))))
                     .addGroup(pane_cardtwoLayout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addComponent(qtd_order_two, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pane_cardtwoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_pizza)
-                            .addComponent(input_qtd_two, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(input_qtd_two, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pane_cardtwoLayout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(btn_pizza)))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(pane_cardtwoLayout.createSequentialGroup()
+                .addGroup(pane_cardtwoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pane_cardtwoLayout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(img_order_two))
+                    .addGroup(pane_cardtwoLayout.createSequentialGroup()
+                        .addGap(107, 107, 107)
+                        .addComponent(name_order_two)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pane_cardtwoLayout.setVerticalGroup(
             pane_cardtwoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pane_cardtwoLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(name_order_two)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(img_order_two, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addGap(27, 27, 27)
                 .addComponent(descrip_order_two, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pane_cardtwoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(input_qtd_two, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(qtd_order_two))
-                .addGap(31, 31, 31)
+                .addGap(39, 39, 39)
                 .addComponent(btn_pizza)
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pane_cardthree.setBackground(new java.awt.Color(153, 189, 169));
@@ -223,10 +252,6 @@ public class Home extends javax.swing.JFrame {
         pane_cardthree.setLayout(pane_cardthreeLayout);
         pane_cardthreeLayout.setHorizontalGroup(
             pane_cardthreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pane_cardthreeLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(name_order_three)
-                .addGap(100, 100, 100))
             .addComponent(descrip_order_three)
             .addGroup(pane_cardthreeLayout.createSequentialGroup()
                 .addGroup(pane_cardthreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -237,10 +262,17 @@ public class Home extends javax.swing.JFrame {
                         .addGap(33, 33, 33)
                         .addComponent(qtd_order_three, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pane_cardthreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_past)
-                            .addComponent(input_qtd_three, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(input_qtd_three, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(45, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pane_cardthreeLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pane_cardthreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pane_cardthreeLayout.createSequentialGroup()
+                        .addComponent(name_order_three)
+                        .addGap(100, 100, 100))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pane_cardthreeLayout.createSequentialGroup()
+                        .addComponent(btn_past)
+                        .addGap(55, 55, 55))))
         );
         pane_cardthreeLayout.setVerticalGroup(
             pane_cardthreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -255,7 +287,7 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(pane_cardthreeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(qtd_order_three)
                     .addComponent(input_qtd_three, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGap(37, 37, 37)
                 .addComponent(btn_past)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -288,42 +320,120 @@ public class Home extends javax.swing.JFrame {
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
+        panel_Cart.setBackground(new java.awt.Color(102, 102, 102));
+
+        cart_title.setBackground(new java.awt.Color(255, 255, 255));
+        cart_title.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
+        cart_title.setForeground(new java.awt.Color(255, 255, 255));
+        cart_title.setText("Carrinho");
+
+        cart_image.setBackground(new java.awt.Color(255, 255, 255));
+        cart_image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/carrinho__1_-removebg-preview (2).png"))); // NOI18N
+
+        cart_circle.setBackground(new java.awt.Color(102, 102, 102));
+        cart_circle.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        cart_circle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/circle-removebg-preview (1).png"))); // NOI18N
+        cart_circle.setText(Integer.toString(this.qtdCarrinho));
+        cart_circle.setFocusable(false);
+        cart_circle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        cart_circle.setOpaque(true);
+
+        jButton1.setBackground(new java.awt.Color(102, 102, 102));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Ver Carrinho");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panel_CartLayout = new javax.swing.GroupLayout(panel_Cart);
+        panel_Cart.setLayout(panel_CartLayout);
+        panel_CartLayout.setHorizontalGroup(
+            panel_CartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_CartLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(cart_image)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cart_title)
+                .addGap(18, 18, 18)
+                .addComponent(cart_circle, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(45, 45, 45))
+        );
+        panel_CartLayout.setVerticalGroup(
+            panel_CartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_CartLayout.createSequentialGroup()
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addGroup(panel_CartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_CartLayout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(cart_title, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cart_image)
+                    .addGroup(panel_CartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cart_circle)
+                        .addComponent(jButton1)))
+                .addGap(14, 14, 14))
+        );
+
+        btn_cancel.setBackground(new java.awt.Color(255, 102, 102));
+        btn_cancel.setFont(new java.awt.Font("Segoe UI Historic", 1, 18)); // NOI18N
+        btn_cancel.setText("Cancelar Pedido");
+        btn_cancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cancelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(pane_cardone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(61, 61, 61)
-                .addComponent(pane_cardtwo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
-                .addComponent(pane_cardthree, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51))
             .addComponent(pane_head, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panel_Cart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_cancel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(pane_cardone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(61, 61, 61)
+                        .addComponent(pane_cardtwo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                        .addComponent(pane_cardthree, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(51, 51, 51))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pane_head, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(56, 56, 56)
+                .addGap(15, 15, 15)
+                .addComponent(btn_cancel)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pane_cardone, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pane_cardtwo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pane_cardthree, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(224, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
+                .addComponent(panel_Cart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_hambActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hambActionPerformed
-        // TODO add your handling code here:
+        String nomePedido = this.name_order_one.getText();
         String quantidade = this.input_qtd_one.getText();
         String observacoes = "";
+        int table;
         if (quantidade.equalsIgnoreCase("") || quantidade.equalsIgnoreCase("0")) {
             JOptionPane.showMessageDialog(pane_cardone, "A quantidade não pode ser nula!");
         } else {
+            table = Integer.parseInt(JOptionPane.showInputDialog(pane_cardone, "Qual número da mesa?"));
             int option = JOptionPane.showConfirmDialog(pane_cardone, "Possui alguma observação no pedido?");
             if (option == JOptionPane.YES_OPTION) {
                  observacoes = JOptionPane.showInputDialog(pane_cardone, "Digite as observações abaixo!");
@@ -331,17 +441,39 @@ public class Home extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(pane_cardone, "Cancelando pedido...");
                 return;
             }
+            
+            Order myOrder = Order.newBuilder()
+                    .setName(nomePedido)
+                    .setCustomerTable(table)
+                    .setObservations(observacoes)
+                    .build();
+            
+            APIResponse response = userStub.registerOrder(myOrder);
+            JOptionPane.showMessageDialog(pane_cardone, response.getResponseMessage());
+            
+            if (response.getMessageCode() == 200) {
+                try {
+                    this.qtdCarrinho++;
+                    this.cart_circle.setText(Integer.toString(this.qtdCarrinho));
+                    this.carrinho.addOrderToCart(myOrder);
+                    JOptionPane.showMessageDialog(pane_cardone, "Seu pedido é o " + posicao +"º da fila :D");
+                    posicao++;
+                } catch (Exception ex) {
+                    Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
     }//GEN-LAST:event_btn_hambActionPerformed
 
     private void btn_pizzaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pizzaActionPerformed
-        // TODO add your handling code here:
+        String nomePedido = this.name_order_two.getText();
         String quantidade = this.input_qtd_two.getText();
         String observacoes = "";
+        int table;
         if (quantidade.equalsIgnoreCase("") || quantidade.equalsIgnoreCase("0")) {
             JOptionPane.showMessageDialog(pane_cardtwo, "A quantidade não pode ser nula!");
-            return;
         } else {
+            table = Integer.parseInt(JOptionPane.showInputDialog(pane_cardtwo, "Qual número da mesa?"));
             int option = JOptionPane.showConfirmDialog(pane_cardtwo, "Possui alguma observação no pedido?");
             if (option == JOptionPane.YES_OPTION) {
                  observacoes = JOptionPane.showInputDialog(pane_cardtwo, "Digite as observações abaixo!");
@@ -349,19 +481,39 @@ public class Home extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(pane_cardtwo, "Cancelando pedido...");
                 return;
             }
+            
+            Order myOrder = Order.newBuilder()
+                    .setName(nomePedido)
+                    .setCustomerTable(table)
+                    .setObservations(observacoes)
+                    .build();
+            
+            APIResponse response = userStub.registerOrder(myOrder);
+            JOptionPane.showMessageDialog(pane_cardtwo, response.getResponseMessage());
+            
+            if (response.getMessageCode() == 200) {
+                try {
+                    this.qtdCarrinho++;
+                    this.cart_circle.setText(Integer.toString(this.qtdCarrinho));
+                    this.carrinho.addOrderToCart(myOrder);
+                    JOptionPane.showMessageDialog(pane_cardtwo, "Seu pedido é o " + posicao +"º da fila :D");
+                    posicao++;
+                } catch (Exception ex) {
+                    Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
-        
-        System.out.println("qtd: " + quantidade + " obs: " + observacoes);
     }//GEN-LAST:event_btn_pizzaActionPerformed
 
     private void btn_pastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pastActionPerformed
-        // TODO add your handling code here:
+        String nomePedido = this.name_order_three.getText();
         String quantidade = this.input_qtd_three.getText();
         String observacoes = "";
+        int table;
         if (quantidade.equalsIgnoreCase("") || quantidade.equalsIgnoreCase("0")) {
             JOptionPane.showMessageDialog(pane_cardthree, "A quantidade não pode ser nula!");
-            return;
         } else {
+            table = Integer.parseInt(JOptionPane.showInputDialog(pane_cardthree, "Qual número da mesa?"));
             int option = JOptionPane.showConfirmDialog(pane_cardthree, "Possui alguma observação no pedido?");
             if (option == JOptionPane.YES_OPTION) {
                  observacoes = JOptionPane.showInputDialog(pane_cardthree, "Digite as observações abaixo!");
@@ -369,10 +521,69 @@ public class Home extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(pane_cardthree, "Cancelando pedido...");
                 return;
             }
+            
+            Order myOrder = Order.newBuilder()
+                    .setName(nomePedido)
+                    .setCustomerTable(table)
+                    .setObservations(observacoes)
+                    .build();
+            
+            APIResponse response = userStub.registerOrder(myOrder);
+            JOptionPane.showMessageDialog(pane_cardthree, response.getResponseMessage());
+            
+            if (response.getMessageCode() == 200) {
+                try {
+                    this.qtdCarrinho++;
+                    this.cart_circle.setText(Integer.toString(this.qtdCarrinho));
+                    this.carrinho.addOrderToCart(myOrder);
+                    JOptionPane.showMessageDialog(pane_cardthree, "Seu pedido é o " + posicao +"º da fila :D");
+                    posicao++;
+                } catch (Exception ex) {
+                    Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
-        
-        System.out.println("qtd: " + quantidade + " obs: " + observacoes);
     }//GEN-LAST:event_btn_pastActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       JFrame jFrame = new JFrame();
+       jFrame.setContentPane(carrinho.getContentPane());
+       jFrame.setLayout(new GridLayout(0,1));
+       jFrame.setTitle("Meu carrinho");
+       jFrame.setSize(new Dimension(300, 650));
+       jFrame.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btn_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelActionPerformed
+        int option = JOptionPane.showConfirmDialog(pane_cardthree, "Deseja mesmo cancelar o seu pedido?");
+        
+        if (option == JOptionPane.YES_OPTION) {
+            int pos = Integer.parseInt(JOptionPane.showInputDialog(null, "Digite o número da sua posição da fila fornecida:"));
+            if (pos >= 1) {
+                OrderID orderId = OrderID.newBuilder()
+                        .setOrderNumber(pos-1)
+                        .build();
+                
+                APIResponse response = userStub.cancelOrder(orderId);
+                JOptionPane.showMessageDialog(null, response.getResponseMessage());
+            
+            if (response.getMessageCode() == 200) {
+                try {
+                    this.qtdCarrinho--;
+                    this.cart_circle.setText(Integer.toString(this.qtdCarrinho));
+                    this.carrinho.removeOrderToCart(pos-1);
+                    JOptionPane.showMessageDialog(null, "Seu pedido da posição " + pos + " foi removido do carrinho!");
+                    posicao--;
+                } catch (Exception ex) {
+                    Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+                
+            } else {
+                JOptionPane.showMessageDialog(null, "Posição inválida!");
+            }
+        }
+    }//GEN-LAST:event_btn_cancelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -410,9 +621,13 @@ public class Home extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_cancel;
     private javax.swing.JButton btn_hamb;
     private javax.swing.JButton btn_past;
     private javax.swing.JButton btn_pizza;
+    private javax.swing.JLabel cart_circle;
+    private javax.swing.JLabel cart_image;
+    private javax.swing.JLabel cart_title;
     private javax.swing.JLabel descrip_order_one;
     private javax.swing.JLabel descrip_order_three;
     private javax.swing.JLabel descrip_order_two;
@@ -422,6 +637,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JTextField input_qtd_one;
     private javax.swing.JTextField input_qtd_three;
     private javax.swing.JTextField input_qtd_two;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel name_order_one;
     private javax.swing.JLabel name_order_three;
@@ -430,6 +646,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel pane_cardthree;
     private javax.swing.JPanel pane_cardtwo;
     private javax.swing.JPanel pane_head;
+    private javax.swing.JPanel panel_Cart;
     private javax.swing.JLabel qtd_order_one;
     private javax.swing.JLabel qtd_order_three;
     private javax.swing.JLabel qtd_order_two;

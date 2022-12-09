@@ -1,15 +1,12 @@
 package com.puccode.snacksclient;
 
 import com.puccode.snacksclient.forms.Home;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Main implements Runnable {
     JFrame jFrame;
-    static ManagedChannel channel;
    
 
     public static void main(String[] args) {
