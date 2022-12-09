@@ -7,7 +7,6 @@ import java.awt.*;
 
 public class Main implements Runnable {
     JFrame jFrame;
-   
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Main());

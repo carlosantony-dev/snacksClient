@@ -446,6 +446,7 @@ public class Home extends javax.swing.JFrame {
                     .setName(nomePedido)
                     .setCustomerTable(table)
                     .setObservations(observacoes)
+                    .setQuantidade(Long.parseLong(quantidade))
                     .build();
             
             APIResponse response = userStub.registerOrder(myOrder);
@@ -456,7 +457,7 @@ public class Home extends javax.swing.JFrame {
                     this.qtdCarrinho++;
                     this.cart_circle.setText(Integer.toString(this.qtdCarrinho));
                     this.carrinho.addOrderToCart(myOrder);
-                    JOptionPane.showMessageDialog(pane_cardone, "Seu pedido é o " + posicao +"º da fila :D");
+                    JOptionPane.showMessageDialog(pane_cardone, "Seu pedido é o número " + posicao +" :D");
                     posicao++;
                 } catch (Exception ex) {
                     Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
@@ -481,11 +482,12 @@ public class Home extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(pane_cardtwo, "Cancelando pedido...");
                 return;
             }
-            
+
             Order myOrder = Order.newBuilder()
                     .setName(nomePedido)
                     .setCustomerTable(table)
                     .setObservations(observacoes)
+                    .setQuantidade(Long.parseLong(quantidade))
                     .build();
             
             APIResponse response = userStub.registerOrder(myOrder);
@@ -496,7 +498,7 @@ public class Home extends javax.swing.JFrame {
                     this.qtdCarrinho++;
                     this.cart_circle.setText(Integer.toString(this.qtdCarrinho));
                     this.carrinho.addOrderToCart(myOrder);
-                    JOptionPane.showMessageDialog(pane_cardtwo, "Seu pedido é o " + posicao +"º da fila :D");
+                    JOptionPane.showMessageDialog(pane_cardtwo, "Seu pedido é o número " + posicao +" :D");
                     posicao++;
                 } catch (Exception ex) {
                     Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
@@ -521,11 +523,12 @@ public class Home extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(pane_cardthree, "Cancelando pedido...");
                 return;
             }
-            
+
             Order myOrder = Order.newBuilder()
                     .setName(nomePedido)
                     .setCustomerTable(table)
                     .setObservations(observacoes)
+                    .setQuantidade(Long.parseLong(quantidade))
                     .build();
             
             APIResponse response = userStub.registerOrder(myOrder);
@@ -536,7 +539,7 @@ public class Home extends javax.swing.JFrame {
                     this.qtdCarrinho++;
                     this.cart_circle.setText(Integer.toString(this.qtdCarrinho));
                     this.carrinho.addOrderToCart(myOrder);
-                    JOptionPane.showMessageDialog(pane_cardthree, "Seu pedido é o " + posicao +"º da fila :D");
+                    JOptionPane.showMessageDialog(pane_cardthree, "Seu pedido é o número " + posicao +" :D");
                     posicao++;
                 } catch (Exception ex) {
                     Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
@@ -573,7 +576,6 @@ public class Home extends javax.swing.JFrame {
                     this.cart_circle.setText(Integer.toString(this.qtdCarrinho));
                     this.carrinho.removeOrderToCart(pos-1);
                     JOptionPane.showMessageDialog(null, "Seu pedido da posição " + pos + " foi removido do carrinho!");
-                    posicao--;
                 } catch (Exception ex) {
                     Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
                 }

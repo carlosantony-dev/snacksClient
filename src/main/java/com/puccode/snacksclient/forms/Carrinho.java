@@ -97,6 +97,7 @@ public class Carrinho extends javax.swing.JFrame {
                 newJpanel.setBackground(Color.WHITE);
                 newJpanel.add(new JLabel("Pedido: " + myOrders.get(i).getName()));
                 newJpanel.add(new JLabel("Mesa: " + myOrders.get(i).getCustomerTable()));
+                newJpanel.add(new JLabel("Qtd: " + myOrders.get(i).getQuantidade()));
                 newJpanel.add(new JLabel("Obs: " + myOrders.get(i).getObservations()));
                 panel_order_list.add(newJpanel);
             }
